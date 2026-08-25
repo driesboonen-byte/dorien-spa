@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dorien's SPAradijs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --sage-deep: #3A5A50;
+    --sage-mid: #6E8B7C;
+    --blush: #E7B6B0;
+    --blush-soft: #F3D9D4;
+    --cream: #FBF2E7;
+    --plum: #5C3244;
+    --gold: #C9A05C;
+    --ink: #2C2622;
+    --shadow: rgba(58,90,80,0.18);
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+
+  html{scroll-behavior:smooth;}
+
+  body{
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'Jost', sans-serif;
+    font-weight: 300;
+    overflow-x:hidden;
+  }
+
+  h1,h2,h3, .display{
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 600;
+    color: var(--sage-deep);
+  }
+
+  .eyebrow{
+    font-family:'Jost', sans-serif;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    font-size: 0.72rem;
+    color: var(--plum);
+    font-weight: 500;
+  }
+
+  /* ---------- background steam texture ---------- */
+  .steam-layer{
+    position: fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:0;
+    opacity:0.5;
+  }
+  .steam-layer svg{width:100%; height:100%;}
+
+  /* ---------- header / hero ---------- */
+  header{
+    position: relative;
+    z-index:1;
+    min-height: 92vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding: 6vh 6vw 4vh;
+    overflow:hidden;
+  }
+
+  .logo-mark{
+    width: 96px;
+    height: 96px;
+    margin-bottom: 1.6rem;
+    animation: floatIn 1.4s ease-out;
+  }
+
+  @keyframes floatIn{
+    from{opacity:0; transform: translateY(-18px) scale(0.92);}
+    to{opacity:1; transform: translateY(0) scale(1);}
+  }
+
+  header h1{
+    font-size: clamp(2.8rem, 8vw, 5.6rem);
+    line-height: 1.02;
+    letter-spacing: -0.01em;
+    animation: floatIn 1.4s ease-out 0.15s both;
+  }
+
+  header h1 em{
+    font-style: italic;
+    color: var(--blush);
+    -webkit-text-stroke: 0.5px var(--sage-deep);
+  }
+
+  .tagline{
+    margin-top: 1.1rem;
+    max-width: 34rem;
+    font-size: 1.08rem;
+    color: var(--plum);
+    font-weight: 400;
+    line-height:1.6;
+    animation: floatIn 1.4s ease-out 0.3s both;
+  }
+
+  .signature-line{
+    margin-top:0.6rem;
+    font-family:'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size:1.1rem;
+    color: var(--sage-mid);
+    animation: floatIn 1.4s ease-out 0.4s both;
+  }
+
+  .cta-row{
+    margin-top: 2.6rem;
+    display:flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content:center;
+    animation: floatIn 1.4s ease-out 0.5s both;
+  }
+
+  .btn{
+    border:none;
+    cursor:pointer;
+    font-family:'Jost', sans-serif;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-size: 0.78rem;
+    font-weight:500;
+    padding: 1rem 2.1rem;
+    border-radius: 999px;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  .btn-primary{
+    background: var(--sage-deep);
+    color: var(--cream);
+    box-shadow: 0 10px 24px -8px var(--shadow);
+  }
+  .btn-primary:hover{ transform: translateY(-2px); box-shadow: 0 14px 30px -8px var(--shadow); }
+
+  .btn-ghost{
+    background: transparent;
+    color: var(--plum);
+    border: 1px solid var(--plum);
+  }
+  .btn-ghost:hover{ background: var(--plum); color: var(--cream); }
+  .btn-ghost.playing{ background: var(--gold); border-color: var(--gold); color: var(--ink); }
+
+  /* ---------- sections ---------- */
+  section{
+    position:relative;
+    z-index:1;
+    padding: 6vh 6vw;
+    max-width: 980px;
+    margin: 0 auto;
+  }
+
+  .divider{
+    width:100%;
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 0 6vw;
+  }
+  .divider svg{width:100%; height:28px; display:block;}
+
+  .section-head{
+    text-align:center;
+    margin-bottom: 3rem;
+  }
+  .section-head h2{
+    font-size: clamp(2rem, 5vw, 2.8rem);
+    margin-top:0.4rem;
+  }
+  .section-head p{
+    color: var(--plum);
+    max-width: 32rem;
+    margin: 0.8rem auto 0;
+    line-height:1.6;
+  }
+
+  /* ---------- service cards ---------- */
+  .menu{
+    display:grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.1rem;
+  }
+  @media (max-width: 640px){ .menu{ grid-template-columns: 1fr; } }
+
+  .service{
+    position: relative;
+    background: #fff;
+    border: 1px solid rgba(58,90,80,0.12);
+    border-radius: 22px;
+    padding: 1.6rem 1.5rem 1.5rem;
+    cursor:pointer;
+    transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+    display:flex;
+    gap:1rem;
+    align-items:flex-start;
+  }
+  .service:hover{ transform: translateY(-3px); box-shadow: 0 14px 28px -14px var(--shadow); }
+  .service.selected{
+    border-color: var(--sage-deep);
+    background: linear-gradient(180deg, #ffffff, var(--blush-soft) 220%);
+    box-shadow: 0 14px 28px -14px var(--shadow);
+  }
+
+  .service .check{
+    flex: 0 0 24px;
+    width:24px; height:24px;
+    border-radius: 50%;
+    border: 1.6px solid var(--sage-mid);
+    margin-top: 0.2rem;
+    display:flex; align-items:center; justify-content:center;
+    transition: background 0.2s ease, border-color 0.2s ease;
+  }
+  .service.selected .check{ background: var(--sage-deep); border-color: var(--sage-deep); }
+  .service .check svg{ width:13px; height:13px; opacity:0; transition: opacity 0.2s ease; }
+  .service.selected .check svg{ opacity:1; }
+
+  .service .txt h3{
+    font-size:1.35rem;
+    margin-bottom:0.3rem;
+  }
+  .service .txt p{
+    font-size:0.88rem;
+    color: var(--plum);
+    line-height:1.55;
+    font-weight:400;
+  }
+  .service .icon{
+    font-size:1.4rem;
+    line-height:1;
+  }
+
+  /* ---------- booking form ---------- */
+  .booking-card{
+    background: var(--sage-deep);
+    color: var(--cream);
+    border-radius: 32px;
+    padding: 3rem 2.4rem;
+    position:relative;
+    overflow:hidden;
+  }
+  .booking-card::before{
+    content:"";
+    position:absolute;
+    right:-60px; top:-60px;
+    width:220px; height:220px;
+    border-radius:50%;
+    background: rgba(231,182,176,0.18);
+  }
+  .booking-card::after{
+    content:"";
+    position:absolute;
+    left:-40px; bottom:-70px;
+    width:180px; height:180px;
+    border-radius:50%;
+    background: rgba(201,160,92,0.14);
+  }
+
+  .booking-card h2{ color: var(--cream); }
+  .booking-card .section-head p{ color: var(--blush-soft); }
+
+  .field-row{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.1rem;
+    margin-top: 1.6rem;
+    position: relative; z-index:1;
+  }
+  @media (max-width:640px){ .field-row{ grid-template-columns: 1fr; } }
+
+  .field{
+    display:flex;
+    flex-direction:column;
+    gap:0.5rem;
+  }
+  .field label{
+    font-size:0.72rem;
+    letter-spacing:0.15em;
+    text-transform:uppercase;
+    color: var(--blush-soft);
+  }
+  .field input{
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 14px;
+    padding: 0.85rem 1rem;
+    color: var(--cream);
+    font-family:'Jost', sans-serif;
+    font-size: 0.95rem;
+    outline:none;
+    transition: border-color 0.2s ease, background 0.2s ease;
+    color-scheme: dark;
+  }
+  .field input::placeholder{ color: rgba(251,242,231,0.55); }
+  .field input:focus{ border-color: var(--gold); background: rgba(255,255,255,0.14); }
+
+  .selected-summary{
+    margin-top: 1.8rem;
+    padding: 1rem 1.2rem;
+    background: rgba(255,255,255,0.08);
+    border: 1px dashed rgba(255,255,255,0.35);
+    border-radius: 16px;
+    font-size: 0.9rem;
+    line-height: 1.7;
+    position:relative; z-index:1;
+    min-height: 3.4rem;
+  }
+  .selected-summary .empty{ color: rgba(251,242,231,0.55); font-style:italic; }
+  .selected-summary strong{ color: var(--gold); font-weight:500; }
+
+  .submit-row{
+    margin-top: 2rem;
+    display:flex;
+    align-items:center;
+    gap: 1.2rem;
+    flex-wrap:wrap;
+    position:relative; z-index:1;
+  }
+
+  .btn-book{
+    background: var(--blush);
+    color: var(--plum);
+  }
+  .btn-book:hover{ background: var(--gold); }
+  .btn-book:disabled{
+    opacity: 0.45;
+    cursor: not-allowed;
+    transform:none !important;
+    box-shadow:none !important;
+  }
+
+  .status-msg{
+    font-size: 0.85rem;
+    color: var(--blush-soft);
+    max-width: 22rem;
+  }
+
+  /* ---------- footer ---------- */
+  footer{
+    position:relative; z-index:1;
+    text-align:center;
+    padding: 4rem 6vw 3rem;
+  }
+  footer .heart-mark{ width:34px; height:34px; margin: 0 auto 0.8rem; opacity:0.8; }
+  footer p{ color: var(--sage-mid); font-size:0.85rem; }
+  footer .by{ font-family:'Cormorant Garamond', serif; font-style:italic; font-size:1.05rem; color:var(--plum); margin-top:0.4rem; }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="steam-layer" id="steamLayer">
+  <svg preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <linearGradient id="steamGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#6E8B7C" stop-opacity="0.10"/>
+        <stop offset="100%" stop-color="#6E8B7C" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+  </svg>
+</div>
+
+<header>
+  <svg class="logo-mark" viewBox="0 0 100 100" fill="none">
+    <!-- two intertwined leaves forming a D&D monogram -->
+    <path d="M50 12 C 30 22, 22 42, 32 62 C 40 78, 58 82, 68 70 C 50 66, 40 50, 50 12 Z" fill="#3A5A50"/>
+    <path d="M50 88 C 70 78, 78 58, 68 38 C 60 22, 42 18, 32 30 C 50 34, 60 50, 50 88 Z" fill="#E7B6B0"/>
+    <circle cx="50" cy="50" r="4.5" fill="#C9A05C"/>
+  </svg>
+  <h1>Dorien's <em>SPAradijs</em></h1>
+  <p class="tagline">Een privé-verwenmenu, speciaal samengesteld voor de mooiste klant die dit salon ooit zal hebben.</p>
+  <p class="signature-line">— gerund door haar persoonlijke masseur, Dries —</p>
+  <div class="cta-row">
+    <a href="#menu" class="btn btn-primary">Bekijk het verwenmenu</a>
+    <button class="btn btn-ghost" id="musicToggle" type="button">♪ Ontspanningsmuziek</button>
+  </div>
+</header>
+
+<div class="divider">
+  <svg viewBox="0 0 400 24" preserveAspectRatio="none">
+    <path d="M0 12 C 50 2, 100 22, 150 12 S 250 2, 300 12 S 380 22, 400 12" stroke="#C9A05C" stroke-width="1.4" fill="none" opacity="0.6"/>
+  </svg>
+</div>
+
+<section id="menu">
+  <div class="section-head">
+    <span class="eyebrow">Het verwenmenu</span>
+    <h2>Kies wat je hart (en je nek) verlangt</h2>
+    <p>Meerdere behandelingen mogen gecombineerd worden — het salon sluit pas wanneer jij helemaal ontspannen bent.</p>
+  </div>
+
+  <div class="menu" id="menuList">
+    <div class="service" data-name="Hairplay" data-icon="🌿">
+      <div class="check"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#FBF2E7" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="txt">
+        <span class="icon">🌿</span>
+        <h3>Hairplay</h3>
+        <p>Rustig door de haren gaan, precies zoals jij het graag hebt. Puur ontspannen.</p>
+      </div>
+    </div>
+
+    <div class="service" data-name="Nek- en rugmassage" data-icon="🌸">
+      <div class="check"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#FBF2E7" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="txt">
+        <span class="icon">🌸</span>
+        <h3>Nek- &amp; rugmassage</h3>
+        <p>Voor als de dag zich in je schouders heeft opgestapeld. Langzaam, warm, grondig.</p>
+      </div>
+    </div>
+
+    <div class="service" data-name="Bilmassage" data-icon="🍑">
+      <div class="check"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#FBF2E7" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="txt">
+        <span class="icon">🍑</span>
+        <h3>Bilmassage</h3>
+        <p>Een specialiteit van het huis. Uitsluitend uitgevoerd door de eigenaar zelf.</p>
+      </div>
+    </div>
+
+    <div class="service" data-name="Voelsafari" data-icon="🦁">
+      <div class="check"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#FBF2E7" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="txt">
+        <span class="icon">🦁</span>
+        <h3>Voelsafari</h3>
+        <p>Een avontuurlijke ontdekkingstocht met de handen. Route wordt ter plekke bepaald.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider">
+  <svg viewBox="0 0 400 24" preserveAspectRatio="none">
+    <path d="M0 12 C 50 22, 100 2, 150 12 S 250 22, 300 12 S 380 2, 400 12" stroke="#6E8B7C" stroke-width="1.4" fill="none" opacity="0.5"/>
+  </svg>
+</div>
+
+<section id="booking">
+  <div class="booking-card">
+    <div class="section-head">
+      <span class="eyebrow" style="color:var(--gold)">Reserveren</span>
+      <h2>Boek jouw afspraak</h2>
+      <p>Kies een datum en tijdstip. De bevestiging wordt klaargezet in jouw mailprogramma, gericht aan het salon.</p>
+    </div>
+
+    <div class="field-row">
+      <div class="field">
+        <label for="dateInput">Datum</label>
+        <input type="date" id="dateInput">
+      </div>
+      <div class="field">
+        <label for="timeInput">Tijdstip</label>
+        <input type="time" id="timeInput">
+      </div>
+    </div>
+
+    <div class="selected-summary" id="summaryBox">
+      <span class="empty">Nog geen behandelingen gekozen — kies hierboven wat je wenst.</span>
+    </div>
+
+    <div class="submit-row">
+      <button class="btn btn-book" id="bookBtn" type="button" disabled>Verstuur boeking</button>
+      <span class="status-msg" id="statusMsg">Dit opent je mailprogramma met alles al ingevuld, klaar om te versturen naar het salon.</span>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <svg class="heart-mark" viewBox="0 0 100 100" fill="none">
+    <path d="M50 88 C 20 66, 6 44, 18 26 C 28 12, 46 14, 50 32 C 54 14, 72 12, 82 26 C 94 44, 80 66, 50 88 Z" fill="#E7B6B0"/>
+  </svg>
+  <p>Dorien's SPAradijs · slechts één klant, onbeperkt geldig</p>
+  <p class="by">met liefde geopend door Dries</p>
+</footer>
+
+<script>
+  // ---- service selection ----
+  const services = document.querySelectorAll('.service');
+  const summaryBox = document.getElementById('summaryBox');
+  const bookBtn = document.getElementById('bookBtn');
+  const dateInput = document.getElementById('dateInput');
+  const timeInput = document.getElementById('timeInput');
+  const statusMsg = document.getElementById('statusMsg');
+
+  function getSelected(){
+    return Array.from(services).filter(s => s.classList.contains('selected')).map(s => s.dataset.name);
+  }
+
+  function updateSummary(){
+    const chosen = getSelected();
+    if(chosen.length === 0){
+      summaryBox.innerHTML = '<span class="empty">Nog geen behandelingen gekozen — kies hierboven wat je wenst.</span>';
+    } else {
+      summaryBox.innerHTML = 'Gekozen: <strong>' + chosen.join('</strong>, <strong>') + '</strong>';
+    }
+    validateForm();
+  }
+
+  function validateForm(){
+    const chosen = getSelected();
+    const ok = chosen.length > 0 && dateInput.value && timeInput.value;
+    bookBtn.disabled = !ok;
+  }
+
+  services.forEach(s => {
+    s.addEventListener('click', () => {
+      s.classList.toggle('selected');
+      updateSummary();
+    });
+  });
+
+  dateInput.addEventListener('change', validateForm);
+  timeInput.addEventListener('change', validateForm);
+
+  function formatDate(iso){
+    if(!iso) return '';
+    const [y,m,d] = iso.split('-');
+    return d + '/' + m + '/' + y;
+  }
+
+  bookBtn.addEventListener('click', () => {
+    const chosen = getSelected();
+    const dateStr = formatDate(dateInput.value);
+    const timeStr = timeInput.value;
+
+    const subject = 'Nieuwe boeking bij Dorien\'s SPAradijs';
+    const body =
+      'Er is een nieuwe afspraak geboekt!\n\n' +
+      'Behandeling(en):\n- ' + chosen.join('\n- ') + '\n\n' +
+      'Datum: ' + dateStr + '\n' +
+      'Tijdstip: ' + timeStr + ' uur\n\n' +
+      'Tot dan! 💚';
+
+    const mailto = 'mailto:driesboonen@gmail.com'
+      + '?subject=' + encodeURIComponent(subject)
+      + '&body=' + encodeURIComponent(body);
+
+    window.location.href = mailto;
+    statusMsg.textContent = 'Je mailprogramma is geopend met de boeking al ingevuld — druk daar nog op versturen.';
+  });
+
+  // ---- ambient spa music (generated, no external files) ----
+  let audioCtx = null;
+  let ambientNodes = [];
+  let playing = false;
+  const musicToggle = document.getElementById('musicToggle');
+
+  let chimeTimeoutId = null;
+
+  function startAmbient(){
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const masterGain = audioCtx.createGain();
+    masterGain.gain.value = 0.0;
+    masterGain.connect(audioCtx.destination);
+    masterGain.gain.linearRampToValueAtTime(0.09, audioCtx.currentTime + 2);
+
+    // soft detuned pad chord, a bit more present
+    const freqs = [130.81, 196.00, 164.81]; // C3, G3, E3
+    freqs.forEach((f, i) => {
+      const osc = audioCtx.createOscillator();
+      osc.type = 'sine';
+      osc.frequency.value = f;
+      const gain = audioCtx.createGain();
+      gain.gain.value = 0.4;
+
+      const lfo = audioCtx.createOscillator();
+      lfo.frequency.value = 0.06 + i * 0.02;
+      const lfoGain = audioCtx.createGain();
+      lfoGain.gain.value = 4;
+      lfo.connect(lfoGain);
+      lfoGain.connect(osc.frequency);
+      lfo.start();
+
+      osc.connect(gain);
+      gain.connect(masterGain);
+      osc.start();
+
+      ambientNodes.push(osc, lfo, gain);
+    });
+
+    // reverb-ish tail for the chimes via a simple convolver (short synthetic impulse)
+    const convolver = audioCtx.createConvolver();
+    const irLength = audioCtx.sampleRate * 2.2;
+    const impulse = audioCtx.createBuffer(2, irLength, audioCtx.sampleRate);
+    for(let ch = 0; ch < 2; ch++){
+      const data = impulse.getChannelData(ch);
+      for(let i = 0; i < irLength; i++){
+        data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / irLength, 2.5);
+      }
+    }
+    convolver.buffer = impulse;
+    const chimeBus = audioCtx.createGain();
+    chimeBus.gain.value = 0.22;
+    chimeBus.connect(convolver);
+    convolver.connect(masterGain);
+    chimeBus.connect(masterGain);
+    ambientNodes.push(convolver, chimeBus);
+
+    // windchime: randomly plucked bell tones on a pentatonic scale
+    const pentatonic = [523.25, 587.33, 659.25, 783.99, 880.00, 1046.50, 1174.66]; // C5 pentatonic-ish
+
+    function pluckChime(){
+      const freq = pentatonic[Math.floor(Math.random() * pentatonic.length)];
+      const now = audioCtx.currentTime;
+
+      const osc = audioCtx.createOscillator();
+      osc.type = 'sine';
+      osc.frequency.value = freq;
+
+      const osc2 = audioCtx.createOscillator();
+      osc2.type = 'sine';
+      osc2.frequency.value = freq * 2.756; // inharmonic bell partial
+
+      const g = audioCtx.createGain();
+      const peak = 0.18 + Math.random() * 0.12;
+      g.gain.setValueAtTime(0, now);
+      g.gain.linearRampToValueAtTime(peak, now + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, now + 3.2 + Math.random() * 1.5);
+
+      const pan = audioCtx.createStereoPanner ? audioCtx.createStereoPanner() : null;
+      if(pan) pan.pan.value = (Math.random() * 2 - 1) * 0.7;
+
+      osc.connect(g);
+      osc2.connect(g);
+      if(pan){ g.connect(pan); pan.connect(chimeBus); } else { g.connect(chimeBus); }
+
+      osc.start(now);
+      osc2.start(now);
+      osc.stop(now + 5);
+      osc2.stop(now + 5);
+    }
+
+    function scheduleChimes(){
+      // a soft cluster of 1-3 chime notes, then a longer pause, like wind gusts
+      const notesInGust = 1 + Math.floor(Math.random() * 3);
+      for(let n = 0; n < notesInGust; n++){
+        setTimeout(pluckChime, n * (180 + Math.random() * 260));
+      }
+      const nextGust = 2600 + Math.random() * 4200;
+      chimeTimeoutId = setTimeout(scheduleChimes, nextGust);
+    }
+    scheduleChimes();
+
+    ambientNodes.push(masterGain);
+    return masterGain;
+  }
+
+  musicToggle.addEventListener('click', () => {
+    if(!playing){
+      const master = startAmbient();
+      playing = true;
+      musicToggle.classList.add('playing');
+      musicToggle.textContent = '♪ Muziek speelt...';
+    } else {
+      if(chimeTimeoutId) clearTimeout(chimeTimeoutId);
+      ambientNodes.forEach(n => { try{ n.stop && n.stop(); }catch(e){} try{ n.disconnect(); }catch(e){} });
+      ambientNodes = [];
+      if(audioCtx) audioCtx.close();
+      playing = false;
+      musicToggle.classList.remove('playing');
+      musicToggle.textContent = '♪ Ontspanningsmuziek';
+    }
+  });
+</script>
+
+</body>
+</html>
