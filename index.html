@@ -475,6 +475,26 @@
   </div>
 </section>
 
+<div class="divider">
+  <svg viewBox="0 0 400 24" preserveAspectRatio="none">
+    <path d="M0 12 C 50 2, 100 22, 150 12 S 250 2, 300 12 S 380 22, 400 12" stroke="#E7B6B0" stroke-width="1.4" fill="none" opacity="0.6"/>
+  </svg>
+</div>
+
+<section id="reverse">
+  <div class="booking-card" style="background: var(--plum);">
+    <div class="section-head">
+      <span class="eyebrow" style="color:var(--gold)">Voor als de rollen omdraaien</span>
+      <h2 style="color: var(--cream);">Dorien wil mij verwennen</h2>
+      <p>Soms is de masseur zelf ook wel aan wat verwennerij toe. Eén klik en Dries krijgt een seintje.</p>
+    </div>
+    <div class="submit-row" style="justify-content:center; margin-top:1.6rem;">
+      <button class="btn btn-book" id="reverseBtn" type="button">Dorien wil mij verwennen 💆</button>
+    </div>
+    <p class="status-msg" id="reverseStatus" style="text-align:center; margin: 0.9rem auto 0; max-width: 26rem;">Dit stuurt meteen een liefdevol seintje naar Dries, geen datum of tijdstip nodig.</p>
+  </div>
+</section>
+
 <footer>
   <svg class="heart-mark" viewBox="0 0 100 100" fill="none">
     <path d="M50 88 C 20 66, 6 44, 18 26 C 28 12, 46 14, 50 32 C 54 14, 72 12, 82 26 C 94 44, 80 66, 50 88 Z" fill="#E7B6B0"/>
@@ -547,6 +567,30 @@
 
     window.location.href = mailto;
     statusMsg.textContent = 'Je mailprogramma is geopend met de boeking al ingevuld — druk daar nog op versturen.';
+  });
+
+  // ---- reverse booking: Dorien wil Dries verwennen ----
+  const reverseBtn = document.getElementById('reverseBtn');
+  const reverseStatus = document.getElementById('reverseStatus');
+
+  reverseBtn.addEventListener('click', () => {
+    const now = new Date();
+    const stamp = String(now.getDate()).padStart(2,'0') + '/' + String(now.getMonth()+1).padStart(2,'0') + '/' + now.getFullYear()
+      + ' om ' + String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
+
+    const subject = 'Dorien wil jou verwennen!';
+    const body =
+      'Verrassing!\n\n' +
+      'Dorien heeft aangegeven dat zij dit keer jou wil verwennen.\n\n' +
+      'Aangevraagd op: ' + stamp + '\n\n' +
+      'Trek je gemakkelijkste kleren aan en zorg dat je klaarzit. 💚';
+
+    const mailto = 'mailto:driesboonen@gmail.com'
+      + '?subject=' + encodeURIComponent(subject)
+      + '&body=' + encodeURIComponent(body);
+
+    window.location.href = mailto;
+    reverseStatus.textContent = 'Mailprogramma geopend met het berichtje al klaarstaand — even op versturen drukken.';
   });
 
   // ---- ambient spa music (generated, no external files) ----
